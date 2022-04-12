@@ -18,6 +18,7 @@
 #include "fremen.h"
 #include "tools.h"
 #include "communication.h"
+#include "mainFunctions.h"
 
 void initSocket();
 

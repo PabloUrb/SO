@@ -18,19 +18,17 @@ char *read_until(int fd, char delimiter){
     return msg;
 }
 
-int extreuCadena (char * origen, int posicio, char limit, char * retorn){
-    int i;
-    i=0;
+int extreuCadena (char * origen, int posicio, char limit, char option[MAX_INPUT]){
+    int i = 0;
     while (origen[posicio] != limit && origen[posicio] != '\0'){
-        retorn[i]=origen[posicio];
+        option[i]=origen[posicio];
         i++;
         posicio++;
     }
-    retorn[i]='\0';
+    option[i]='\0';
     posicio++;
     return posicio;
 }
-
 
 int myAtoi(char * cadena){
     int retorn = 0;
@@ -42,17 +40,45 @@ int myAtoi(char * cadena){
     return retorn;
 }
 
-void printa(char * cadena){
-    write(1, cadena, strlen(cadena));
-}
-
 void printaInt(int i){
     char aux[10];
     sprintf(aux, "\nInt: %d\n\n", i);
     printa(aux);
 }
 
+int myStrlen(char * cadena){
+    int i = 0;
+    while(cadena[i] != '\0'){
+        i++;
+    }
+    return i;
+}
 
+void myToLowerCase(char * input){
+    for(int i = 0; i < myStrlen(input); i++){
+        if(input[i] >= 'A' && input[i] <= 'Z'){
+            input[i] = input[i] + ('a' - 'A');
+        }
+    }
+}
+
+/*
+ *
+ * return:  1 si son iguals
+ *          -1 si no son iguals
+ */
+int myStrcmp(char * cad1, char * cad2){
+    //printa(cad1);
+    //printa(cad2);
+    for (int i = 0; cad1[i] != '\0' || cad2[i] != '\0'; i++) {
+        if(cad1[i] != cad2[i]) return -1;
+    }
+    return 1;
+}
+
+void printa(char * cadena){
+    write(1, cadena, myStrlen(cadena));
+}
 
 Config *llegirFitxer(char * fileConfig){
     Config * config = (Config *)malloc(sizeof (Config));
@@ -86,13 +112,38 @@ Config *llegirFitxer(char * fileConfig){
     return config;
 }
 
-void prepareData(char * input, char * option){
-    int espais = 0;
+/*
+ *
+ * return:  0 si no hi ha espais
+ *          1 si ...
+ */
+int prepareData(char * input, char option[MAX_INPUT]){
+    int n_espais = 0;
+    int index = 0;
+
+    myToLowerCase(input);
 
     for (int i = 0; input[i] != '\0'; ++i) {
-        if(input[i] == ' ') espais++;
+        if(input[i] == ' ') n_espais++;
     }
-    printaInt(espais);
+
+    if(n_espais == 0){
+        for (int i = 0; i < myStrlen(input); ++i) {
+            option[i] = input[i];
+        }
+    }else{
+        index = extreuCadena(input, index, ' ', option);
+        for (int i = 0; input[index] != '\0'; i++) {
+            input[i] = input[index];
+            index++;
+        }
+    }
+    //printa("\nInput: ");
+    //printa(input);
+    //printa("\nOption: ");
+    //printa(option);
+    //printa("\n");
+    return n_espais;
 }
 
 void freeAllMem(Config * config){

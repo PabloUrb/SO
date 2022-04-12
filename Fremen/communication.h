@@ -16,6 +16,7 @@
 #include "fremen.h"
 #include "tools.h"
 #include "socket.h"
+#include "mainFunctions.h"
 
 void initCom();
 
